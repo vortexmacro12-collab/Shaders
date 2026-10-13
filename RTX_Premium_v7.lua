@@ -21,6 +21,8 @@
     removes only the objects it created.
 ]]
 
+print("[RTX Premium] loading...")
+
 local Workspace = game:GetService("Workspace")
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
@@ -1225,6 +1227,9 @@ local function updateCamera(dt)
     autoExpoAdd = (master and config.autoExposure > 0) and (1 - autoOpen) * config.autoExposure * 0.9 or 0
 end
 
+-- UI and main loop live in their own function: Luau allows only 200 locals per function.
+local okUI, errUI = pcall(function()
+
 --========================================================
 -- OVERLAY: vignette + letterbox bars
 --========================================================
@@ -1927,3 +1932,8 @@ end
 setMenu(true)
 toast("RTX Premium v" .. VERSION .. "  ·  press " .. menuKey.Name .. " for the menu")
 print("[RTX Premium v" .. VERSION .. "] Ready. Press " .. menuKey.Name .. " to toggle the menu.")
+
+end)
+if not okUI then
+    warn("[RTX Premium] failed to start: " .. tostring(errUI))
+end
